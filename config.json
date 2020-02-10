@@ -11,17 +11,18 @@
     "max_connections": 100
   },
   "db_admin": {
-      "host": "localhost",
-      "port": 5432,
-      "database": "logicsem",
-      "user": "postgres",
-      "password": "XXX",
-      "application_name": "dpdb-admin"
+    "host": "localhost",
+    "port": 5432,
+    "database": "logicsem",
+    "user": "postgres",
+    "password": "y_]4Yz'C4m(]",
+    "application_name": "dpdb-admin"
   },
   "htd": {
-    "path": "../htd/bin/htd_main",
+    "path": "C:\\Users\\Martin\\Documents\\GitHub\\htd\\build\\debug\\htd_main",
     "parameters": [
-      "--child-limit","5"
+      "--child-limit",
+      "5"
     ]
   },
   "dpdb": {
