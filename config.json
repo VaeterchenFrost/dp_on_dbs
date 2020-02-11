@@ -21,8 +21,6 @@
   "htd": {
     "path": "C:\\Users\\Martin\\Documents\\GitHub\\htd\\build\\debug\\htd_main",
     "parameters": [
-      "--child-limit",
-      "5"
     ]
   },
   "dpdb": {
