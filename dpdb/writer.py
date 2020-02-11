@@ -10,19 +10,31 @@ class Writer(object):
         pass
 
     def write_gr(self, num_vertices, edges):
-        self.writeline("p tw {0} {1}".format(num_vertices,len(edges)))
+        self.writeline("p tw {0} {1}".format(num_vertices, len(edges)))
         for e in edges:
-            self.writeline("{0} {1}".format(e[0],e[1]))
+            self.writeline("{0} {1}".format(e[0], e[1]))
         self.flush()
 
-    def write_td(self, num_bags, tree_width, num_orig_vertices, root, bags, edges):
-        self.writeline("s td {0} {1} {2}".format(num_bags, tree_width + 1, num_orig_vertices))
+    def write_td(
+            self,
+            num_bags,
+            tree_width,
+            num_orig_vertices,
+            root,
+            bags,
+            edges):
+        self.writeline(
+            "s td {0} {1} {2}".format(
+                num_bags,
+                tree_width + 1,
+                num_orig_vertices))
         self.writeline("c r {0}".format(root))
         for b, v in bags.items():
-            self.writeline("b {0} {1}".format(b, " ".join(map(str,v))))
+            self.writeline("b {0} {1}".format(b, " ".join(map(str, v))))
         for e in edges:
-            self.writeline("{0} {1}".format(e[0],e[1]))
-        
+            self.writeline("{0} {1}".format(e[0], e[1]))
+
+
 class StreamWriter(Writer):
     def __init__(self, stream):
         self.stream = stream
@@ -32,6 +44,7 @@ class StreamWriter(Writer):
 
     def flush(self):
         self.stream.flush()
+
 
 class FileWriter(Writer):
     def __init__(self, fname, mode="w"):

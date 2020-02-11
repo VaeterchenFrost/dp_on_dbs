@@ -8,28 +8,29 @@ from .sat_util import *
 
 logger = logging.getLogger(__name__)
 
+
 class SharpSat(Problem):
 
     def __init__(self, name, pool, store_formula=False, **kwargs):
         super().__init__(name, pool, **kwargs)
         self.store_formula = store_formula
 
-    def td_node_column_def(self,var):
+    def td_node_column_def(self, var):
         return td_node_column_def(var)
 
     def td_node_extra_columns(self):
-        return [("model_count","NUMERIC")]
-        
-    def candidate_extra_cols(self,node):
+        return [("model_count", "NUMERIC")]
+
+    def candidate_extra_cols(self, node):
         return ["{} AS model_count".format(
-                " * ".join(set([var2cnt(node,v) for v in node.vertices] +
+                " * ".join(set([var2cnt(node, v) for v in node.vertices] +
                                [node2cnt(n) for n in node.children])) if node.vertices or node.children else "1"
                 )]
 
-    def assignment_extra_cols(self,node):
+    def assignment_extra_cols(self, node):
         return ["sum(model_count) AS model_count"]
 
-    def filter(self,node):
+    def filter(self, node):
         return filter(self.var_clause_dict, node)
 
     def prepare_input(self, fname):
@@ -53,11 +54,24 @@ class SharpSat(Problem):
 
         def insert_data():
             self.db.ignore_next_praefix()
-            self.db.insert("problem_sharpsat",("id","num_vars","num_clauses"),
-                (self.id, self.num_vars, self.num_clauses))
+            self.db.insert(
+                "problem_sharpsat",
+                ("id",
+                 "num_vars",
+                 "num_clauses"),
+                (self.id,
+                 self.num_vars,
+                 self.num_clauses))
             if "faster" not in self.kwargs or not self.kwargs["faster"]:
                 self.db.ignore_next_praefix()
-                self.db.insert("problem_option",("id", "name", "value"),(self.id,"store_formula",self.store_formula))
+                self.db.insert(
+                    "problem_option",
+                    ("id",
+                     "name",
+                     "value"),
+                    (self.id,
+                     "store_formula",
+                     self.store_formula))
                 if self.store_formula:
                     store_clause_table(self.db, self.clauses)
 
@@ -66,19 +80,28 @@ class SharpSat(Problem):
 
     def after_solve(self):
         root_tab = f"td_node_{self.td.root.id}"
-        sum_count = self.db.replace_dynamic_tabs(f"(select coalesce(sum(model_count),0) from {root_tab})")
+        sum_count = self.db.replace_dynamic_tabs(
+            f"(select coalesce(sum(model_count),0) from {root_tab})")
         self.db.ignore_next_praefix()
-        model_count = self.db.update("problem_sharpsat",["model_count"],[sum_count],[f"ID = {self.id}"],"model_count")[0]
+        model_count = self.db.update(
+            "problem_sharpsat",
+            ["model_count"],
+            [sum_count],
+            [f"ID = {self.id}"],
+            "model_count")[0]
         logger.info("Problem has %d models", model_count)
 
-def var2cnt(node,var):
+
+def var2cnt(node, var):
     if node.needs_introduce(var):
         return "1"
     else:
-        return "{}.model_count".format(var2tab_alias(node,var))
+        return "{}.model_count".format(var2tab_alias(node, var))
+
 
 def node2cnt(node):
     return "{}.model_count".format(node2tab_alias(node))
+
 
 args.specific[SharpSat] = dict(
     help="Solve #SAT instances (count number of models)",
@@ -91,4 +114,3 @@ args.specific[SharpSat] = dict(
         )
     }
 )
-
