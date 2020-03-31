@@ -105,20 +105,17 @@ class DB(object):
         q = sql.SQL(
             "DROP TABLE %s {}" %
             "IF EXISTS" if if_exists else "").format(
-            self.__table_name__(name))
+                self.__table_name__(name))
         self.execute_ddl(q)
 
     def create_table(self, name, columns, if_not_exists=True):
         q = sql.SQL(
             "CREATE TABLE %s {} ({})" %
             "IF NOT EXISTS" if if_not_exists else "").format(
-            self.__table_name__(name),
-            sql.SQL(', ').join(
-                sql.Identifier(
-                    c[0]) +
-                sql.SQL(
-                    " " +
-                    c[1]) for c in columns))
+                self.__table_name__(name),
+                sql.SQL(', ').join(
+                    sql.Identifier(c[0]) +
+                    sql.SQL(" " + c[1]) for c in columns))
         self.execute_ddl(q)
 
     def create_view(self, name, text):
@@ -242,9 +239,7 @@ class DBAdmin(DB):
 class BlockingThreadedConnectionPool(ThreadedConnectionPool):
     def __init__(self, minconn, maxconn, *args, **kwargs):
         self._semaphore = Semaphore(maxconn)
-        super(
-            BlockingThreadedConnectionPool,
-            self).__init__(
+        super(BlockingThreadedConnectionPool, self).__init__(
             minconn,
             maxconn,
             *args,
@@ -252,9 +247,7 @@ class BlockingThreadedConnectionPool(ThreadedConnectionPool):
 
     def getconn(self, *args, **kwargs):
         self._semaphore.acquire()
-        return super(
-            BlockingThreadedConnectionPool,
-            self).getconn(
+        return super(BlockingThreadedConnectionPool, self).getconn(
             *args,
             **kwargs)
 
