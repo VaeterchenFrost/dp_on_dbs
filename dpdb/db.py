@@ -19,7 +19,7 @@ def setup_debug_sql():
     logging.Logger.debug_sql = debug_sql
 
 
-logger = logging.getLogger(__name__)
+LOGGER = logging.getLogger(__name__)
 
 
 class DB(object):
@@ -44,7 +44,7 @@ class DB(object):
 
     # we need this wrapper because conn object is required
     def __debug_query__(self, query, params=[]):
-        logger.debug_sql(query.as_string(self._conn), *params)
+        LOGGER.debug_sql(query.as_string(self._conn), *params)
 
     def __table_name__(self, table):
         if self._praefix and self._ignore_next_praefix == 0:
@@ -78,7 +78,7 @@ class DB(object):
                 cur.execute(q, p)
                 self.last_rowcount = cur.rowcount
         except pg.errors.AdminShutdown:
-            logger.warning("Connection closed by admin")
+            LOGGER.warning("Connection closed by admin")
 
     def exec_and_fetch(self, q, p=[]):
         try:
@@ -88,7 +88,7 @@ class DB(object):
                 self.last_rowcount = cur.rowcount
                 return cur.fetchone()
         except pg.errors.AdminShutdown:
-            logger.warning("Connection closed by admin")
+            LOGGER.warning("Connection closed by admin")
 
     def execute_ddl(self, q):
         try:
@@ -99,7 +99,7 @@ class DB(object):
             # should make transition to e.g. Oracle easier
             self.commit()
         except pg.errors.AdminShutdown:
-            logger.warning("Connection closed by admin")
+            LOGGER.warning("Connection closed by admin")
 
     def drop_table(self, name, if_exists=True):
         q = sql.SQL(
