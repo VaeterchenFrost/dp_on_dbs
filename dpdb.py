@@ -96,8 +96,8 @@ def solve_problem(cfg, cls, file, **kwargs):
         tdr.adjacency_list)
     logger.info(
         f"#bags: {td.num_bags} tree_width: {td.tree_width} "
-        " #vertices: {td.num_orig_vertices} "
-        "#leafs: {len(td.leafs)} #edges: {len(td.edges)}")
+        f" #vertices: {tdr.num_orig_vertices} "
+        f"#leafs: {len(td.leafs)} #edges: {len(td.edges)}")
     if "td_file" in kwargs and kwargs["td_file"]:
         with FileWriter(kwargs["td_file"]) as fw:
             fw.write_td(
