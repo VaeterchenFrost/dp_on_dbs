@@ -52,14 +52,21 @@ class VertexCover(Problem):
         return ["min(size) AS size"]
 
     def filter(self, node):
-        # at least one of connected nodes has to be in the set
+        """Local problem filter:
+            ([[u1]] OR [[v1]]) AND ... ([[uN]] OR [[vN]])
+            See treedecomp.node for parameters of node.
+        """
+        print(node)
         check = []
         for c in node.vertices:
             if node.needs_introduce(c):
-                nv = [v for v in self.edges[c] if v in node.vertices] + [c]
-                if len(nv) > 1:
-                    check.append(" OR ".join(map(var2col, nv)))
+                print(self.edges[c])
+                nv = [(v,c) for v in self.edges[c] if v in node.vertices]
+                for edge in nv:
+                    check.append(" OR ".join(map(var2col, edge)))
+                    print('check', check)
         if check:
+            print("WHERE ({})".format(") AND (".join(check)))
             return "WHERE ({})".format(") AND (".join(check))
         else:
             return ""
