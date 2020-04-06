@@ -64,7 +64,7 @@ class Node(object):
         self._vertex_child_map = {v: [] for v in vertices}
 
     def __str__(self):
-        return "{0}: {{{1}}}".format(
+        return "{0}: {1}".format(
             self.id, ", ".join(map(str, self.vertices)))
 
     def __repr__(self):

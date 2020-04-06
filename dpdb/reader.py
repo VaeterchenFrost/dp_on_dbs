@@ -30,7 +30,7 @@ class DimacsReader(Reader):
         self.problem_solution_type = "?"
         self.format = "?"
         lines = string.split("\n")
-        print("====Reading:\n", "\n".join(lines[:10]), "--------------")
+        print("====Reading:\n", "\n".join(lines[:50]), "-----------50")
         body_start = self.preamble(lines)
         self.store_problem_vars()
         self.body(lines[body_start:])
