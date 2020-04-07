@@ -30,7 +30,7 @@ class VertexCover(Problem):
             if join:
                 q += " + "
         if join:
-            q += "{}".format(" + ".join(join))
+            q += " + ".join(join)
             if len(join) > 1:
                 children = [
                     vc for c in node.children for vc in c.vertices if vc in node.vertices]
@@ -45,7 +45,7 @@ class VertexCover(Problem):
             q += "0"
 
         q += " AS size"
-
+        print('q ', node, q)
         return [q]
 
     def assignment_extra_cols(self, node):
@@ -56,15 +56,17 @@ class VertexCover(Problem):
             ([[u1]] OR [[v1]]) AND ... ([[uN]] OR [[vN]])
             See treedecomp.node for parameters of node.
         """
-        print(node)
+        print('node: adj', node)
+        # find (undirected!) edges in the subgraph
         check = []
-        for c in node.vertices:
-            if node.needs_introduce(c):
-                print(self.edges[c])
-                nv = [(v,c) for v in self.edges[c] if v in node.vertices]
+        for pos,c in enumerate(node.vertices[:-1]):
+            # if node.needs_introduce(c):
+                # print(self.edges[c])
+                nv = [(v, c) for v in self.edges[c] if
+                      v in node.vertices[pos+1:]] # don't connect backwards
                 for edge in nv:
                     check.append(" OR ".join(map(var2col, edge)))
-                    print('check', check)
+                    # print('check', check)
         if check:
             print("WHERE ({})".format(") AND (".join(check)))
             return "WHERE ({})".format(") AND (".join(check))
