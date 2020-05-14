@@ -16,4 +16,3 @@
 config.json
 *.pyc
 .pylint.d/dpdb1.stats
-*.pyc
