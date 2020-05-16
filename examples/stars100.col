@@ -1,4 +1,4 @@
-c
+c expected: 82
 p edge 100 552
 e 5 7
 e 1 8
