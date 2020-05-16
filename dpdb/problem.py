@@ -2,11 +2,11 @@
 import logging
 import os
 import signal
-import threading
+# import threading
 from concurrent.futures import ThreadPoolExecutor
 from types import SimpleNamespace
 
-from dpdb.reader import TwReader
+# from dpdb.reader import TwReader
 from dpdb.db import DB
 
 logger = logging.getLogger(__name__)

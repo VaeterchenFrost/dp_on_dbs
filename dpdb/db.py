@@ -1,6 +1,6 @@
 # -*- coding: future_fstrings -*-
 import logging
-import select
+# import select
 import re
 import psycopg2 as pg
 from psycopg2 import sql
@@ -122,7 +122,7 @@ class DB(object):
             dyn_tab = self.__table_name__(tab).as_string(self._conn)
             return m.group(1) + dyn_tab + m.group(3)
 
-        query = re.sub("(\W)(td_node_\w+)((\W|$))",
+        query = re.sub(r"(\W)(td_node_\w+)((\W|$))",
             repl,
             query)
 

@@ -14,3 +14,4 @@
 *.toc
 config.json
 *.pyc
+*.stats
