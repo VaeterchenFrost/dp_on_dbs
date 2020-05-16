@@ -12,3 +12,5 @@
 *.pdfsync
 *.snm
 *.toc
+config.json
+*.pyc
