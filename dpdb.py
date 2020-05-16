@@ -6,7 +6,6 @@ import subprocess
 import argparse
 import signal
 
-import dpdb.problems as problems
 from dpdb.db import BlockingThreadedConnectionPool, DEBUG_SQL, setup_debug_sql, DBAdmin
 from dpdb.reader import TdReader
 from dpdb.writer import StreamWriter, FileWriter
@@ -39,7 +38,7 @@ def flatten_cfg(dd, filter=[], separator='.', prefix=''):
 
 def solve_problem(cfg, cls, file, **kwargs):
     def signal_handler(sig, frame):
-        if sig == signal.SIGUSR1:
+        if (sys.platform != 'win32') and (sig == signal.SIGUSR1):
             logger.warning("Terminating because of error in worker thread")
         else:
             logger.warning("Killing all connections")
@@ -54,7 +53,8 @@ def solve_problem(cfg, cls, file, **kwargs):
     admin_db = DBAdmin.from_cfg(cfg["db_admin"])
     signal.signal(signal.SIGINT, signal_handler)
     signal.signal(signal.SIGTERM, signal_handler)
-    signal.signal(signal.SIGUSR1, signal_handler)
+    if sys.platform != 'win32':
+        signal.signal(signal.SIGUSR1, signal_handler)
 
     pool = BlockingThreadedConnectionPool(1,cfg["db"]["max_connections"],**cfg["db"]["dsn"])
     problem = cls(file,pool, **cfg["dpdb"], **kwargs)
