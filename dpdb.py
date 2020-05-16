@@ -6,6 +6,7 @@ import subprocess
 import argparse
 import signal
 
+import dpdb.problems as problems # Import different problems!
 from dpdb.db import BlockingThreadedConnectionPool, DEBUG_SQL, setup_debug_sql, DBAdmin
 from dpdb.reader import TdReader
 from dpdb.writer import StreamWriter, FileWriter

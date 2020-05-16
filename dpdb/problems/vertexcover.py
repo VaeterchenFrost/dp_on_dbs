@@ -2,7 +2,7 @@
 import logging
 
 from dpdb.reader import TdReader, TwReader, EdgeReader
-from dpdb.problem import *
+from dpdb.problem import args, Problem, var2col, var2tab_col, var2tab_alias, node2tab_alias
 
 logger = logging.getLogger(__name__)
 
