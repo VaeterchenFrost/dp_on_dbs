@@ -86,4 +86,4 @@ class Node(object):
         return self.children == []
 
     def is_root(self):
-        return self.parent == None
+        return self.parent is None
