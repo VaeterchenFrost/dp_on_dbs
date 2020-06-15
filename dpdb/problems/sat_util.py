@@ -56,4 +56,7 @@ def store_clause_table(db, clauses):
     num_vars = len(clauses)
     db.create_table("sat_clause", map(td_node_column_def,range(1,num_vars+1)))
     for clause in clauses:
-        db.insert("sat_clause",list(map(lit2var,clause)),list(map(lit2val,clause)))
+        unique_literals = set(clause)
+        db.insert("sat_clause",
+                  list(map(lit2var,unique_literals)),
+                  list(map(lit2val,unique_literals)))
